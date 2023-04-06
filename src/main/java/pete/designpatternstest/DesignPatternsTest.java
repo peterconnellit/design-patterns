@@ -16,7 +16,7 @@ public class DesignPatternsTest {
 
     public static void main(String[] args) {
         
-        JFrame frame = new JFrame("Design Pattern Template");
+        JFrame frame = new JFrame("Design Pattern Singleton");
         Canvas canvas = new Canvas();
         frame.add(canvas, BorderLayout.CENTER);
         frame.setSize(300,350);

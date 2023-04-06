@@ -21,15 +21,32 @@ public class Canvas extends JPanel{
     private BufferedImage blueImage;
     private Sprite bluePlane;
     
+    private BufferedImage redImage;
+    private Sprite redPlane;
+    
     public Canvas(){
         this.setLayout(null);
         this.setBackground(Color.WHITE);
-        blueImage = loadImage("images/blue_plane.png");
-        bluePlane = new BluePlane(120,250,blueImage);        
+        
+        redImage = ImageUtil.loadImage("images/red_plane.png");
+        redPlane = new RedPlane(80,250,redImage);
+        
+        blueImage = ImageUtil.loadImage("images/blue_plane.png");
+        bluePlane = new BluePlane(160,250,blueImage);        
     
         this.addKeyListener(new KeyAdapter(){
             public void keyPressed(KeyEvent e){
                 int keyCode = e.getKeyCode();
+                if(keyCode == KeyEvent.VK_E){
+                    redPlane.move(0, -6);
+                }else if(keyCode == KeyEvent.VK_D){
+                    redPlane.move(0, 6);
+                }else if(keyCode == KeyEvent.VK_F){
+                    redPlane.move(6, 0);
+                }else if(keyCode == KeyEvent.VK_S){
+                    redPlane.move(-6, 0);
+                }            
+
                 if(keyCode == KeyEvent.VK_UP){
                     bluePlane.move(0, -6);
                 }else if(keyCode == KeyEvent.VK_DOWN){
@@ -47,17 +64,8 @@ public class Canvas extends JPanel{
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         bluePlane.draw(g);
+        redPlane.draw(g);
     }
     
-    public BufferedImage loadImage(String imagePath){
-        File file = new File(imagePath);
-        BufferedImage bufferedImage = null;
-        try{
-            bufferedImage = ImageIO.read(file);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return bufferedImage;
-    }
     
 }
