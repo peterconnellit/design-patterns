@@ -6,47 +6,40 @@ package pete.designpatternstest;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JPanel;
 
 /**
  *
  * @author peter
  */
 
-public class Canvas extends JPanel{
+public class Canvas extends JPanel implements Runnable{
     
-    private BufferedImage blueImage;
-    private Sprite bluePlane;
+    private boolean isRun = true;
+    private BluePlane bluePlane;
+    private int canvasWidth;
+    private int canvasHeight;
     
-    private BufferedImage redImage;
-    private Sprite redPlane;
+    static{
+        ImageCache.put("redBulletImage", ImageUtil.loadImage("images/red_bullet.png"));
+        ImageCache.put("bluePlaneImage", ImageUtil.loadImage("images/blue_plane.png"));
+    }
     
     public Canvas(){
         this.setLayout(null);
         this.setBackground(Color.WHITE);
         
-        redImage = ImageUtil.loadImage("images/red_plane.png");
-        redPlane = new RedPlane(80,250,redImage);
+        bluePlane = new BluePlane(120,250);
+        bluePlane.loadBullet(new RedBullet(-100, -100));
+        bluePlane.setVisible(true);
         
-        blueImage = ImageUtil.loadImage("images/blue_plane.png");
-        bluePlane = new BluePlane(160,250,blueImage);        
+        new Thread(this).start();
+        
     
         this.addKeyListener(new KeyAdapter(){
             public void keyPressed(KeyEvent e){
                 int keyCode = e.getKeyCode();
-                if(keyCode == KeyEvent.VK_E){
-                    redPlane.move(0, -6);
-                }else if(keyCode == KeyEvent.VK_D){
-                    redPlane.move(0, 6);
-                }else if(keyCode == KeyEvent.VK_F){
-                    redPlane.move(6, 0);
-                }else if(keyCode == KeyEvent.VK_S){
-                    redPlane.move(-6, 0);
-                }            
-
+                
                 if(keyCode == KeyEvent.VK_UP){
                     bluePlane.move(0, -6);
                 }else if(keyCode == KeyEvent.VK_DOWN){
@@ -55,16 +48,32 @@ public class Canvas extends JPanel{
                     bluePlane.move(6, 0);
                 }else if(keyCode == KeyEvent.VK_LEFT){
                     bluePlane.move(-6, 0);
-                }
-                Canvas.this.repaint();
+                }else if(keyCode == KeyEvent.VK_ENTER){
+                    bluePlane.fireBullet();
+                }                
             }
         });
     }
     
     protected void paintComponent(Graphics g){
+        this.canvasWidth = this.getWidth();
+        this.canvasHeight = this.getHeight();
         super.paintComponent(g);
         bluePlane.draw(g);
-        redPlane.draw(g);
+        bluePlane.getBullet().draw(g);        
+    }
+    
+    @Override
+    public void run(){
+        while(isRun){
+            try{
+                bluePlane.moveBullet();
+                Thread.sleep(50);
+                Canvas.this.repaint();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
     }
     
     
