@@ -5,6 +5,7 @@
 package pete.designpatternstest;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -20,13 +21,26 @@ public class SelectDialog extends JDialog{
         this.setBackground(Color.WHITE);
         this.setSize(300, 150);
         this.setLayout(new FlowLayout());
+        
         bluePlaneButton = new JButton();
         bluePlaneButton.setIcon(new ImageIcon("images/blue_plane.png"));
         bluePlaneButton.setBackground(Color.WHITE);
+        bluePlaneButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                SelectDialog.this.dispose();
+            }
+        });
         
         redPlaneButton = new JButton();
         redPlaneButton.setIcon(new ImageIcon("images/red_plane.png"));
         redPlaneButton.setBackground(Color.WHITE);
+        redPlaneButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                SelectDialog.this.dispose();
+            }
+        });
         
         this.add(bluePlaneButton);
         this.add(redPlaneButton);
@@ -38,6 +52,7 @@ public class SelectDialog extends JDialog{
     
     public static class Builder {
         private SelectDialog dialog;
+        
         public Builder(){
             dialog = new SelectDialog();
         }
