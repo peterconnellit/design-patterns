@@ -13,68 +13,26 @@ import javax.swing.JPanel;
  * @author peter
  */
 
-public class Canvas extends JPanel implements Runnable{
+public class Canvas extends JPanel {
     
-    private boolean isRun = true;
-    private BluePlane bluePlane;
-    private int canvasWidth;
-    private int canvasHeight;
+    private Sprite plane;
+    private String type;
     
     static{
-        ImageCache.put("redBulletImage", ImageUtil.loadImage("images/red_bullet.png"));
+        ImageCache.put("redPlaneImage", ImageUtil.loadImage("images/red_plane.png"));
         ImageCache.put("bluePlaneImage", ImageUtil.loadImage("images/blue_plane.png"));
     }
     
-    public Canvas(){
+    public Canvas(String type){
+        this.type = type;
         this.setLayout(null);
         this.setBackground(Color.WHITE);
-        
-        bluePlane = new BluePlane(120,250);
-        bluePlane.loadBullet(new RedBullet(-100, -100));
-        bluePlane.setVisible(true);
-        
-        new Thread(this).start();
-        
-    
-        this.addKeyListener(new KeyAdapter(){
-            public void keyPressed(KeyEvent e){
-                int keyCode = e.getKeyCode();
-                
-                if(keyCode == KeyEvent.VK_UP){
-                    bluePlane.move(0, -6);
-                }else if(keyCode == KeyEvent.VK_DOWN){
-                    bluePlane.move(0, 6);
-                }else if(keyCode == KeyEvent.VK_RIGHT){
-                    bluePlane.move(6, 0);
-                }else if(keyCode == KeyEvent.VK_LEFT){
-                    bluePlane.move(-6, 0);
-                }else if(keyCode == KeyEvent.VK_ENTER){
-                    bluePlane.fireBullet();
-                }                
-            }
-        });
+        plane = SpriteFactory.create(type, 120, 250);
     }
     
-    protected void paintComponent(Graphics g){
-        this.canvasWidth = this.getWidth();
-        this.canvasHeight = this.getHeight();
+    protected void paintComponent(Graphics g){ 
         super.paintComponent(g);
-        bluePlane.draw(g);
-        bluePlane.getBullet().draw(g);        
+        plane.draw(g);           
     }
-    
-    @Override
-    public void run(){
-        while(isRun){
-            try{
-                bluePlane.moveBullet();
-                Thread.sleep(50);
-                Canvas.this.repaint();
-            }catch (InterruptedException e){
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    
+       
 }

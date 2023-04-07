@@ -4,17 +4,18 @@
  */
 package pete.designpatternstest;
 
-import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
 
 /**
  *
  * @author peter
  */
-
-public class RedPlane extends Sprite{
+public class CGlobal {
     
-    public RedPlane (int x, int y, BufferedImage image){
-        super(x, y, image);
+    private CGlobal(){
+    
     }
+    
+    public static JFrame frame;
     
 }

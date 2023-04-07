@@ -25,10 +25,14 @@ public class SelectDialog extends JDialog{
         bluePlaneButton = new JButton();
         bluePlaneButton.setIcon(new ImageIcon("images/blue_plane.png"));
         bluePlaneButton.setBackground(Color.WHITE);
-        bluePlaneButton.addActionListener(new ActionListener(){
-            @Override
+        bluePlaneButton.addActionListener(new ActionListener(){            
             public void actionPerformed(ActionEvent e){
+                Canvas canvas = new Canvas("1");
                 SelectDialog.this.dispose();
+                CGlobal.frame.repaint();
+                CGlobal.frame.add(canvas, BorderLayout.CENTER);
+                canvas.setFocusable(true);
+                canvas.requestFocus();
             }
         });
         
@@ -36,9 +40,13 @@ public class SelectDialog extends JDialog{
         redPlaneButton.setIcon(new ImageIcon("images/red_plane.png"));
         redPlaneButton.setBackground(Color.WHITE);
         redPlaneButton.addActionListener(new ActionListener(){
-            @Override
             public void actionPerformed(ActionEvent e){
+                Canvas canvas = new Canvas("2");
                 SelectDialog.this.dispose();
+                CGlobal.frame.repaint();
+                CGlobal.frame.add(canvas, BorderLayout.CENTER);
+                canvas.setFocusable(true);
+                canvas.requestFocus();
             }
         });
         
