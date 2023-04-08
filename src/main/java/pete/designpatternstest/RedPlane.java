@@ -11,10 +11,10 @@ import java.awt.image.BufferedImage;
  * @author peter
  */
 
-public class RedPlane extends Sprite{
+public class RedPlane extends Plane{
     
-    public RedPlane (int x, int y, BufferedImage image){
-        super(x, y, image);
+    public RedPlane (int x, int y){
+        super(x, y, ImageCache.get("redPlaneImage"));
     }
     
 }
