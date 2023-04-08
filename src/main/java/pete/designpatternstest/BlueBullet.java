@@ -10,10 +10,10 @@ import java.awt.image.BufferedImage;
  *
  * @author peter
  */
-public class RedBullet extends Bullet {
+public class BlueBullet extends Bullet{
     
-    public RedBullet(int x, int y){        
-        super(x, y, ImageCache.get("redBulletImage"));
+    public BlueBullet(int x, int y){
+        super(x, y, ImageCache.get("blueBulletImage"));
     }
-        
+    
 }
