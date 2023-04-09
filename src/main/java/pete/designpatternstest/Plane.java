@@ -4,7 +4,10 @@
  */
 package pete.designpatternstest;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -12,28 +15,60 @@ import java.awt.image.BufferedImage;
  */
 public class Plane extends Sprite{
     
-    protected Bullet bullet;
+    private CopyOnWriteArrayList<Bullet> bulletList = new CopyOnWriteArrayList<Bullet>();
+    private BufferedImage bulletImage;    
     
     public Plane (int x, int y, BufferedImage image){
         super(x, y, image);
     }
     
-    public void loadBullet(Bullet bullet){
-        this.bullet = bullet;
-    }
-    
-    public void fireBullet(){
-        if(!bullet.isVisible()){
-            int x = this.x + this.width/2-bullet.getWidth()/2;
-            int y = this.y - bullet.getHeight();
+    public void createBullets(){
+        if(this.bulletList.size()<100){
+            Bullet bullet = new RedBullet(-100, -100);
+            int x = this.getX() + this.getWidth()/2 - bullet.getWidth()/2;
+            int y = this.getY() - bullet.getHeight();
             bullet.setX(x);
             bullet.setY(y);
             bullet.setVisible(true);
+            bulletList.add(bullet);
         }                
     }
     
-    public Bullet getBullet(){
-        return this.bullet;
+    public void drawBullets(Graphics g){
+        Iterator<Bullet> iter = this.bulletList.iterator();
+        while (iter.hasNext()){
+            Bullet bullet = iter.next();
+            if(bullet.isVisible()){
+                bullet.draw(g);
+            }
+        }
     }
+    
+    public void moveBullet(int distanceX, int distanceY){
+        Iterator<Bullet> iter = this.bulletList.iterator();
+        while (iter.hasNext()){
+            Bullet bullet = iter.next();
+            if(bullet.isVisible()){
+                bullet.move(distanceX, distanceY);
+            }
+        }
+        
+        for (int i = this.bulletList.size() - 1; i>=0; i--){
+            Bullet bullet = this.bulletList.get(i);
+            if(bullet.getY() + bullet.getHeight() <=0){
+                this.bulletList.remove(bullet);
+            }
+        }        
+    }
+    
+        public void loadBulletImage(BufferedImage bulletImage) {
+        this.bulletImage = bulletImage;
+    }
+
+    
+    public List<Bullet> getBulletList(){
+        return this.bulletList;
+    }
+    
     
 }

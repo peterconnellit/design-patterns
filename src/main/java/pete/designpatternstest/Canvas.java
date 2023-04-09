@@ -19,18 +19,27 @@ import javax.swing.*;
 public class Canvas extends JPanel implements Runnable{
     
     private boolean isRun = true;
-    private BluePlane bluePlane;
+    private Plane plane;
+    private BulletProps bulletProps;
+    private int canvasWidth;
+    private int canvasHeight;
     
-    static{
+    static{ 
+        ImageCache.put("redBulletImage", ImageUtil.loadImage("images/red_bullet.png"));
         ImageCache.put("bluePlaneImage", ImageUtil.loadImage("images/blue_plane.png"));
-        ImageCache.put("redBulletImage", ImageUtil.loadImage("images/red_bullet.png"));        
+        ImageCache.put("blueDecoratorImage", ImageUtil.loadImage("images/bullet_decorator.png"));        
     }
     
     public Canvas(){    
         this.setLayout(null);
         this.setBackground(Color.WHITE);
         
-        bluePlane = new BluePlane(120, 250);        
+        bulletProps = new BulletProps(120, 0);
+        bulletProps.setVisible(true);
+        
+        BufferedImage bluePlaneImage = ImageCache.get("bluePlaneImage");
+        plane = new BluePlane(120, 250, bluePlaneImage);
+        plane.setVisible(true);
     
         new Thread(this).start();
         
@@ -38,13 +47,13 @@ public class Canvas extends JPanel implements Runnable{
             public void keyPressed(KeyEvent e){
                 int keyCode = e.getKeyCode();                   
                 if(keyCode == KeyEvent.VK_UP){
-                    bluePlane.move(0, -3);
+                    plane.move(0, -3);
                 }else if(keyCode == KeyEvent.VK_DOWN){
-                    bluePlane.move(0, 3);
+                    plane.move(0, 3);
                 }else if(keyCode == KeyEvent.VK_RIGHT){
-                    bluePlane.move(3, 0);
+                    plane.move(3, 0);
                 }else if(keyCode == KeyEvent.VK_LEFT){
-                    bluePlane.move(-3, 0);
+                    plane.move(-3, 0);
                 }                
                 Canvas.this.repaint();
             }
@@ -52,17 +61,29 @@ public class Canvas extends JPanel implements Runnable{
     }
     
     protected void paintComponent(Graphics g){
+        this.canvasWidth = this.getWidth();
+        this.canvasHeight = this.getHeight();
         super.paintComponent(g);
-        bluePlane.draw(g);
-        bluePlane.drawBullets(g);        
-    }  
+        plane.draw(g);
+        plane.drawBullets(g);
+        bulletProps.draw(g);
+    }
+    
+    public void collideCheck(){
+        if(plane.collideWith(bulletProps)){
+            bulletProps.setVisible(false);
+            plane = new PlaneDecorator(plane, this.canvasHeight);
+            plane.setVisible(true);
+        }
+    }
 
-    @Override
     public void run(){
         while(isRun){
             try{
-                bluePlane.createBullets();
-                bluePlane.moveBullets(0, -3);
+                plane.createBullets();
+                plane.moveBullet(0, -3);
+                bulletProps.move(0, 3);
+                collideCheck();
                 Thread.sleep(50);
                 Canvas.this.repaint();                
             }catch (InterruptedException e){

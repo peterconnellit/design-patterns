@@ -4,20 +4,17 @@
  */
 package pete.designpatternstest;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
 
 /**
  *
  * @author peter
  */
-
-public class BluePlane extends Plane{   
+public class BulletProps extends Bullet{
     
-    public BluePlane (int x, int y, BufferedImage image){
-        super(x, y, image);
+    public BulletProps(int x, int y){
+        super(x, y, ImageCache.get("blueDecoratorImage"));
     }
+    
 }
-
-
-
