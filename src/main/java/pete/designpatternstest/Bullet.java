@@ -16,14 +16,4 @@ public class Bullet extends Sprite{
         super(x, y, image);
     }
     
-    public void move(int distanceX, int distanceY){
-        this.x = this.x + distanceX;
-        this.y = this.y + distanceY;
-        
-        //bullet can be fired when it touches top of canvas
-        if(this.y + this.height <=0){
-            this.setVisible(false);
-        }
-    }
-    
 }
