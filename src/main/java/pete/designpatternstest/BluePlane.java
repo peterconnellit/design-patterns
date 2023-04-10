@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  * @author peter
  */
 
-public class BluePlane extends Plane{   
+public class BluePlane extends Sprite{   
     
     public BluePlane (int x, int y){
         super(x, y, ImageCache.get("bluePlaneImage"));
