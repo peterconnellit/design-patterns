@@ -17,7 +17,7 @@ public class TestDecorator {
         JFrame frame = new JFrame("Design Pattern Decorator");
         Canvas canvas = new Canvas();
         frame.add(canvas, BorderLayout.CENTER);
-        frame.setSize(300, 350);
+        frame.setSize(500, 550);
         canvas.setFocusable(true);
         frame.setVisible(true);
         canvas.requestFocus();

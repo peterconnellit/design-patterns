@@ -15,8 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Plane extends Sprite{
     
-    private CopyOnWriteArrayList<Bullet> bulletList = new CopyOnWriteArrayList<Bullet>();
-    private BufferedImage bulletImage;    
+    private CopyOnWriteArrayList<Bullet> bulletList = new CopyOnWriteArrayList<Bullet>();   
     
     public Plane (int x, int y, BufferedImage image){
         super(x, y, image);
@@ -61,14 +60,9 @@ public class Plane extends Sprite{
         }        
     }
     
-        public void loadBulletImage(BufferedImage bulletImage) {
-        this.bulletImage = bulletImage;
-    }
-
+  
     
     public List<Bullet> getBulletList(){
         return this.bulletList;
     }
-    
-    
 }

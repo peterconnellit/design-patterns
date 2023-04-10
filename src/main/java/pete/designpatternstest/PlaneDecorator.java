@@ -26,10 +26,7 @@ public class PlaneDecorator extends Plane{
         this.canvasHeight = canvasHeight;
     }
     
-    public void loadBulletImage(BufferedImage bulletImage){
-        super.loadBulletImage(bulletImage);
-        this.bulletImage = bulletImage;
-    }
+ 
     
     public void move(int distanceX, int distanceY){
         plane.move(distanceX, distanceY);
@@ -60,13 +57,13 @@ public class PlaneDecorator extends Plane{
         }
     }
     
-    public void moveBullets(int distanceX, int distanceY){
+    public void moveBullet(int distanceX, int distanceY){
         plane.moveBullet(distanceX, distanceY);
         Iterator<Bullet> iter = this.bulletList.iterator();
         while(iter.hasNext()){
             Bullet bullet = iter.next();
             if (bullet.isVisible()){
-                bullet.move(distanceX, distanceY);            
+                bullet.move(distanceX, -distanceY);            
             }
         }
         

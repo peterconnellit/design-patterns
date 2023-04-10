@@ -14,8 +14,8 @@ import java.awt.image.BufferedImage;
 
 public class BluePlane extends Plane{   
     
-    public BluePlane (int x, int y, BufferedImage image){
-        super(x, y, image);
+    public BluePlane (int x, int y){
+        super(x, y, ImageCache.get("bluePlaneImage"));
     }
 }
 

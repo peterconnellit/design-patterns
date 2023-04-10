@@ -27,7 +27,7 @@ public class Canvas extends JPanel implements Runnable{
     static{ 
         ImageCache.put("redBulletImage", ImageUtil.loadImage("images/red_bullet.png"));
         ImageCache.put("bluePlaneImage", ImageUtil.loadImage("images/blue_plane.png"));
-        ImageCache.put("blueDecoratorImage", ImageUtil.loadImage("images/bullet_decorator.png"));        
+        ImageCache.put("blueDecoratorImage", ImageUtil.loadImage("images/explosion.png"));        
     }
     
     public Canvas(){    
@@ -36,9 +36,8 @@ public class Canvas extends JPanel implements Runnable{
         
         bulletProps = new BulletProps(120, 0);
         bulletProps.setVisible(true);
-        
-        BufferedImage bluePlaneImage = ImageCache.get("bluePlaneImage");
-        plane = new BluePlane(120, 250, bluePlaneImage);
+                
+        plane = new BluePlane(120, 250);
         plane.setVisible(true);
     
         new Thread(this).start();
@@ -47,15 +46,14 @@ public class Canvas extends JPanel implements Runnable{
             public void keyPressed(KeyEvent e){
                 int keyCode = e.getKeyCode();                   
                 if(keyCode == KeyEvent.VK_UP){
-                    plane.move(0, -3);
+                    plane.move(0, -12);
                 }else if(keyCode == KeyEvent.VK_DOWN){
-                    plane.move(0, 3);
+                    plane.move(0, 12);
                 }else if(keyCode == KeyEvent.VK_RIGHT){
-                    plane.move(3, 0);
+                    plane.move(12, 0);
                 }else if(keyCode == KeyEvent.VK_LEFT){
-                    plane.move(-3, 0);
-                }                
-                Canvas.this.repaint();
+                    plane.move(-12, 0);
+                }             
             }
         });       
     }
@@ -69,7 +67,7 @@ public class Canvas extends JPanel implements Runnable{
         bulletProps.draw(g);
     }
     
-    public void collideCheck(){
+    private void collideCheck(){
         if(plane.collideWith(bulletProps)){
             bulletProps.setVisible(false);
             plane = new PlaneDecorator(plane, this.canvasHeight);
@@ -84,7 +82,7 @@ public class Canvas extends JPanel implements Runnable{
                 plane.moveBullet(0, -3);
                 bulletProps.move(0, 3);
                 collideCheck();
-                Thread.sleep(50);
+                Thread.sleep(200);
                 Canvas.this.repaint();                
             }catch (InterruptedException e){
                 e.printStackTrace();
