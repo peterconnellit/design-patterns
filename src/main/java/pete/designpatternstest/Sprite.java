@@ -12,15 +12,20 @@ import java.awt.image.BufferedImage;
  * @author peter
  */
 
-class Sprite {
+abstract class Sprite {
     protected int x;
     protected int y;
+    protected int width;
+    protected int height;    
     protected BufferedImage image;
+    protected boolean visible;
 
     public Sprite (int x, int y, BufferedImage image){
         this.x = x;
         this.y = y;
-        this.image = image;   
+        this.image = image;
+        this.width = this.image.getWidth();
+        this.height = this.image.getHeight();
     }
     
     public void draw(Graphics g){
@@ -31,4 +36,41 @@ class Sprite {
         this.x = this.x + distanceX;
         this.y = this.y + distanceY;        
     }
+    
+    public int getWidth(){
+        return width;
+    }
+    
+    public int getHeight(){
+        return height;
+    }
+    
+    public int getX(){
+        return x;
+    }
+    
+    public void setX(int x){
+        this.x = x;
+    }
+    
+    public int getY(){
+        return y;
+    }
+    
+    public int setY(int y){
+        return y;
+    }
+    
+    public boolean isVisible(){
+        return visible;
+    }
+    
+    public void setVisible(boolean visible){
+        this.visible = visible;
+    }
+    
+    public BufferedImage getImage(){
+        return image;
+    }
+    
 }
