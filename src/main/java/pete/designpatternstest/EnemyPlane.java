@@ -13,8 +13,14 @@ import java.awt.image.BufferedImage;
  */
 public class EnemyPlane extends Sprite{
     
-    public EnemyPlane(int x, int y, BufferedImage image){
-        super(x, y, image);
+    public EnemyPlane(int x, int y){
+        super(x, y, ImageCache.get("enemyPlaneImage"));
+    }
+    
+    public void draw(Graphics g){
+        if(this.isVisible()){
+            g.drawImage(image, this.x, this.y, null);
+        }
     }
     
 }
