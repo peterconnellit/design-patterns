@@ -4,17 +4,17 @@
  */
 package pete.designpatternstest;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-
 /**
  *
  * @author peter
  */
-public class EnemyPlane extends Sprite{
+public class PlayAudioTest {
     
-    public EnemyPlane(int x, int y){
-        super(x, y, ImageCache.get("enemyPlaneImage"));
+    public static void main(String[] args) {
+        String filename = "media/impactsamp.wav";
+        PlayAudio player = new PlayAudio(filename);
+        player.run();
     }
-        
+
+    
 }

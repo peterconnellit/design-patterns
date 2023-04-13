@@ -29,7 +29,9 @@ abstract class Sprite {
     }
     
     public void draw(Graphics g){
-        g.drawImage(image, this.x, this.y, null);        
+        if(this.isVisible()){
+        g.drawImage(image, this.x, this.y, null);
+        }        
     }
     
     public void move(int distanceX, int distanceY){
