@@ -15,6 +15,7 @@ import java.util.*;
 public class BluePlane extends Sprite{
     
     protected RedBullet bullet;
+    protected List<Observer> observerList = new ArrayList<Observer>();
     private int canvasWidth;
     private int canvasHeight;
     
@@ -47,6 +48,16 @@ public class BluePlane extends Sprite{
         return this.bullet;
     }
     
+    public void registerObserver(Observer observer){
+        observerList.add(observer);
+    }
+
+    public void notifyAll(ObserverData data){
+        for(int i=0; i<observerList.size(); i++){
+            Observer observer = observerList.get(i);
+            observer.update(data);
+        }
+    }
 }
 
 

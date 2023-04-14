@@ -16,10 +16,10 @@ public class DesignPatternsTest {
 
     public static void main(String[] args) {
         
-        JFrame frame = new JFrame("Design Pattern Singleton");
+        JFrame frame = new JFrame("Airborne Absurdity");
         Canvas canvas = new Canvas();
         frame.add(canvas, BorderLayout.CENTER);
-        frame.setSize(300,350);
+        frame.setSize(300,500);
         canvas.setFocusable(true);
         frame.setVisible(true);
         canvas.requestFocus();
