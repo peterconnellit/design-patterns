@@ -6,6 +6,9 @@ package pete.designpatternstest;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.Font;
+import java.awt.Color;
+
 
 /**
  *
@@ -27,6 +30,9 @@ public class PlaneScore implements Observer{
     }
     
     public void draw(Graphics g){
+        Font font = new Font("Arial", Font.BOLD, 15); // set font size to 24
+        g.setFont(font);
+        g.setColor(Color.WHITE);
         g.drawString(String.valueOf(score), x, y);
     }
     

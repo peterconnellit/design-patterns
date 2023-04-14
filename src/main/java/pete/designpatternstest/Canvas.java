@@ -29,6 +29,8 @@ public class Canvas extends JPanel implements Runnable{
     private EnemyPlane enemyPlane;
     private PlaneLife planeLife;
     private PlaneScore planeScore;
+    private Mediator mediator;
+    private boolean explosionVisible = false;
       
     static{
         BufferedImage mapImage=ImageUtil.loadImage("images/grass.png");       
@@ -39,7 +41,8 @@ public class Canvas extends JPanel implements Runnable{
         ImageCache.put("redBulletImage", ImageUtil.loadImage("images/red_bullet.png"));
         ImageCache.put("enemyPlaneImage", ImageUtil.loadImage("images/enemy_plane.png")); 
         ImageCache.put("bluePlaneImage", ImageUtil.loadImage("images/blue_plane1.png")); 
-        ImageCache.put("bluePlaneLifeImage", ImageUtil.loadImage("images/blue_plane_small.png")); 
+        ImageCache.put("bluePlaneLifeImage", ImageUtil.loadImage("images/blue_plane_small.png"));
+        ImageCache.put("explosionImage", ImageUtil.loadImage("images/explosion.png")); 
     }
     
     public Canvas(){    
@@ -69,6 +72,8 @@ public class Canvas extends JPanel implements Runnable{
         planeScore = new PlaneScore(0, 0, canvasWidth, canvasHeight);
         bluePlane.registerObserver(planeScore);
         
+        mediator = new MediatorImpl();
+        
         new Thread(this).start();
         
         this.addKeyListener(new KeyAdapter(){
@@ -85,7 +90,7 @@ public class Canvas extends JPanel implements Runnable{
                 }else if(keyCode == KeyEvent.VK_ENTER){
                     bluePlane.fireBullet();
                 }
-                Canvas.this.repaint();
+                
             }
         });   
         
@@ -99,16 +104,20 @@ public class Canvas extends JPanel implements Runnable{
             init();
             isInit = true;
         }     
-        super.paintComponent(g);       
+        super.paintComponent(g);
+        collideCheck(g);
         drawMap(g);        
         bluePlane.draw(g);        
         bluePlane.getBullet().draw(g);
         enemyPlane.draw(g);
         planeLife.draw(g);
         planeScore.draw(g);
+        if (explosionVisible) {            
+            mediator.handle(g, enemyPlane.getX(), enemyPlane.getY());
+        }
     }
 
-    private void collideCheck(){
+    private void collideCheck(Graphics g){
         if(bluePlane.getBullet().collideWith(enemyPlane)){
             enemyPlane.setVisible(false);
             bluePlane.getBullet().setVisible(false);
@@ -117,18 +126,22 @@ public class Canvas extends JPanel implements Runnable{
             data.setNotifyType(NotifyType.INCREMENT_SCORE);
             data.setScore(100);
             bluePlane.notifyAll(data);
+            
+            explosionVisible = true;
         }
 
         if(bluePlane.collideWith(enemyPlane)){
             enemyPlane.setVisible(false);
             bluePlane.setVisible(false);
-
+            
             ObserverData data = new ObserverData();
             data.setNotifyType(NotifyType.PLANE_DESTROY);
             bluePlane.notifyAll(data);
 
             bluePlane.setX(this.canvasWidth/2 - bluePlane.getWidth()/2);
-            bluePlane.setY(this.canvasHeight - bluePlane.getHeight() - 30);       
+            bluePlane.setY(this.canvasHeight - bluePlane.getHeight() - 30);
+            
+            explosionVisible = true;
         }     
         
     }
@@ -150,9 +163,9 @@ public class Canvas extends JPanel implements Runnable{
         while(isRun){
             try{
                 enemyPlane.move(0, 2);
-                collideCheck();
+                explosionVisible = false; 
                 bluePlane.moveBullet();
-                Thread.sleep(100);
+                Thread.sleep(80);
                 Canvas.this.repaint();                   
             }catch(InterruptedException e){
                 e.printStackTrace();

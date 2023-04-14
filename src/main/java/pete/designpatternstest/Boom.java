@@ -24,6 +24,7 @@ public class Boom extends Sprite implements Media{
         this.y = y;
         super.draw(g);
         this.setVisible(false);
+        System.out.println("Adios ya bad egg...");
     }
     
 }
