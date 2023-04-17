@@ -11,6 +11,8 @@ import java.awt.Graphics;
  *
  * @author peter
  */
+//Defines the implementation of the handle method in the Mediator interface
+
 public class MediatorImpl implements Mediator{
     
     private Boom boom;

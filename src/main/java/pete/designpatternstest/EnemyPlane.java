@@ -11,9 +11,13 @@ import java.awt.image.BufferedImage;
  *
  * @author peter
  */
+
+// Represents an enemy plane in the game.
 public class EnemyPlane extends Sprite{
     
+    // Constructor with x and y coordinates
     public EnemyPlane(int x, int y){
+        // Calls the constructor of the Sprite class
         super(x, y, ImageCache.get("enemyPlaneImage"));
     }
         

@@ -12,12 +12,16 @@ import javax.imageio.ImageIO;
  *
  * @author peter
  */
+
+/* This class provides utility methods for working with images.
+The class is designed as a singleton*/
 public class ImageUtil {
     
-    private ImageUtil(){
-        
+    // The constructor is private to prevent instances of the class from being created
+    private ImageUtil(){      
     }
     
+    // Loads a BufferedImage from the specified file path.
     public static BufferedImage loadImage(String imagePath){
         File file = new File(imagePath);
         BufferedImage bufferedImage = null;

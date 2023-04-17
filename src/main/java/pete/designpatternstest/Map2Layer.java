@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
  *
  * @author peter
  */
+
+// Similar implimentation to MapLayer class. This sets space background.
 public class Map2Layer extends TiledLayer{
     
     private int canvasWidth;

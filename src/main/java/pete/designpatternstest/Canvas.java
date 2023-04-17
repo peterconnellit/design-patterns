@@ -15,6 +15,9 @@ import javax.swing.*;
  *
  * @author peter
  */
+
+/* Contains the logic to create and draw the game objects on the screen, including the blue plane, the enemy plane,
+the map layers, and the bullet. It also handles user inputs and game events such as collisions and score increments.*/
 public class Canvas extends JPanel implements Runnable {
 
     private boolean isRun = true;
@@ -33,6 +36,7 @@ public class Canvas extends JPanel implements Runnable {
     private final Object pauseLock = new Object();
     private volatile boolean isPaused = false;
 
+    // static block loads several images using the ImageUtil class and stores them in the ImageCache class.
     static {
         BufferedImage mapImage = ImageUtil.loadImage("images/grass.png");
         ImageCache.put("mapImage", mapImage);
@@ -46,11 +50,13 @@ public class Canvas extends JPanel implements Runnable {
         ImageCache.put("explosionImage", ImageUtil.loadImage("images/explosion.png"));
     }
 
+    // Creates a new instance of Canvas.
     public Canvas() {
         this.setLayout(null);
         this.setBackground(Color.WHITE);
     }
 
+    // Initializes the game objects and the Mediator, and starts the game loop.
     private void init() {
         mapContext = new MapContext();
         mapContext.addMap(new MapLayer(this.canvasWidth, this.canvasHeight));
@@ -77,6 +83,7 @@ public class Canvas extends JPanel implements Runnable {
 
         new Thread(this).start();
 
+        // Add key listener to handle user inputs
         this.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
@@ -95,15 +102,18 @@ public class Canvas extends JPanel implements Runnable {
             }
         });
 
+        // Add mouse listener to handle popup menu
         MouseListener popupListener = new PopupListener();
         this.addMouseListener(popupListener);
 
     }
 
+    // Class to handle popup menu
     class PopupListener extends MouseAdapter {
 
         public void mouseReleased(MouseEvent e) {
             if (e.isPopupTrigger()) {
+                // Create popup menu and add options
                 JPopupMenu popupMenu = new JPopupMenu();
                 JMenu fileMenu = new JMenu("Game");
                 JMenuItem stopFile = new JMenuItem("Pause");
@@ -116,6 +126,7 @@ public class Canvas extends JPanel implements Runnable {
                 popupMenu.add(exitFile);
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());
 
+                // Add action listener to menu items
                 stopFile.setActionCommand("Pause");
                 stopFile.addActionListener(menuActionListener);
                 resumeFile.setActionCommand("Resume");
@@ -126,6 +137,7 @@ public class Canvas extends JPanel implements Runnable {
         }
     }
 
+    // Action listener for popup menu items
     ActionListener menuActionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -139,14 +151,19 @@ public class Canvas extends JPanel implements Runnable {
         }
     };
 
+    // Responsible for painting the components on the canvas.
     protected void paintComponent(Graphics g) {
+        // Set the canvas dimensions based on the width and height of the canvas
         this.canvasWidth = this.getWidth();
         this.canvasHeight = this.getHeight();
 
+        // Initialize the game if it has not been initialized yet
         if (!isInit) {
             init();
             isInit = true;
         }
+        
+        // Clear the canvas and call the necessary methods to draw the game objects
         super.paintComponent(g);
         collideCheck(g);
         drawMap(g);
@@ -160,6 +177,11 @@ public class Canvas extends JPanel implements Runnable {
         }
     }
 
+    /* Responsible for checking collisions between game objects.
+    Checks for collision between the blue plane's bullet and the enemy plane
+    and updates the score and visibility accordingly.
+    Also checks for collision between the blue plane and the enemy plane,
+    updates the visibility accordingly, and handles the plane destruction event.*/
     private void collideCheck(Graphics g) {
         if (bluePlane.getBullet().collideWith(enemyPlane)) {
             enemyPlane.setVisible(false);
@@ -189,6 +211,8 @@ public class Canvas extends JPanel implements Runnable {
 
     }
 
+    /* Responsible for drawing the game map.
+    It updates the map view port and draws the map layer.*/
     public void drawMap(Graphics g) {
         mapLayer.setViewPort(0, screenY);
         mapLayer.draw(g);
@@ -201,6 +225,8 @@ public class Canvas extends JPanel implements Runnable {
         }
     }
 
+    /* Runs the game loop, moves the enemy plane and the blue plane's bullet, 
+    and repaints the canvas. also handles pausing and resuming the game.*/
     @Override
     public void run() {
         while (isRun) {
@@ -221,10 +247,12 @@ public class Canvas extends JPanel implements Runnable {
         }
     }
 
+    // Pauses game
     public void pause() {
         isPaused = true;
     }
 
+    // Resumes game
     public void resume() {
         synchronized (pauseLock) {
             isPaused = false;
